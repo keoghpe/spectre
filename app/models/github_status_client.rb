@@ -1,12 +1,12 @@
 class GithubStatusClient
-  def post_status(commit_number, state: 'pending', target_url: '', description: '', context: '')
+  def post_status(commit_sha, state: 'pending', target_url: '', description: '', context: '')
     # state	string	Required. The state of the status. Can be one of error, failure, pending, or success.
     # target_url	string	The target URL to associate with this status.
     #                                                                                                                                                                        http://ci.example.com/user/repo/build/sha
     # description	string	A short description of the status.
     # context	string	A string label to differentiate this status from the status of other systems. Default: default
 
-    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{commit_number}/statuses",
+    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{commit_sha}/statuses",
                   body: {
                       state: state,
                       target_url: target_url,

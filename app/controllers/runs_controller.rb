@@ -22,7 +22,17 @@ class RunsController < ApplicationController
   def create
     project = Project.find_or_create_by(name: params[:project])
     suite = project.suites.find_or_create_by(name: params[:suite])
-    @run = suite.runs.create
+    # add commit sha, add number of screenshots, post to github
+    @run = suite.runs.create(sha: params[:sha], screenshot_count: param[:screenshot_count])
+    if params[:sha].present?
+      GithubStatusClient.new.post_status(
+          params[:sha],
+          state: 'pending',
+          target_url: run_url(run),
+          description: 'Processing Screenshots',
+          context: 'kubicle_visual_ci'
+      )
+    end
     render :json => @run.to_json
   end
 end

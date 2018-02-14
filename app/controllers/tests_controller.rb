@@ -28,4 +28,26 @@ class TestsController < ApplicationController
   def test_params
     params.require(:test).permit(:name, :browser, :size, :screenshot, :run_id, :source_url, :fuzz_level, :highlight_colour, :crop_area)
   end
+
+  def update_github_status
+    if @test.run.sha.present?
+      if passed?
+        GithubStatusClient.new.post_status(
+            @test.run.sha,
+            state: 'success',
+            target_url: run_url(@test.run),
+            description: 'Screenshots look good!',
+            context: 'kubicle_visual_ci'
+        )
+      else
+        GithubStatusClient.new.post_status(
+            @test.run.sha,
+            state: 'failure',
+            target_url: run_url(@test.run),
+            description: '',
+            context: 'kubicle_visual_ci'
+        )
+      end
+    end
+  end
 end
