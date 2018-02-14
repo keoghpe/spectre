@@ -24,6 +24,8 @@ gem 'image_size'
 
 # Use Unicorn as the app server
 gem 'unicorn'
+gem "jwt"
+gem 'httparty'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
