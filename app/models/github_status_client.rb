@@ -48,7 +48,7 @@ class GithubStatusClient
   end
 
   def get_jwt
-    private_pem = File.read(Rails.root.join('visual-qa.2018-02-14.private-key.pem'))
+    private_pem = ENV['GITHUB_PRIVATE']
     private_key = OpenSSL::PKey::RSA.new(private_pem)
 
     payload = {
