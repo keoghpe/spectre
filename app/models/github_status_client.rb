@@ -1,25 +1,28 @@
 class GithubStatusClient
-  def post_status(commit_sha, state: 'pending', target_url: '', description: '', context: '')
+  def post_status(run, state: 'pending', target_url: '', description: '', context: '')
     # state	string	Required. The state of the status. Can be one of error, failure, pending, or success.
     # target_url	string	The target URL to associate with this status.
     #                                                                                                                                                                        http://ci.example.com/user/repo/build/sha
     # description	string	A short description of the status.
     # context	string	A string label to differentiate this status from the status of other systems. Default: default
+    if run.access_token.nil?
+      run.update!(access_token: get_access_token['token'])
+    end
 
-    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{commit_sha.strip}/statuses",
+    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{run.sha.strip}/statuses",
                   body: {
                       state: state,
                       target_url: target_url,
                       description: description,
                       context: context
                   }.to_json,
-                  headers: token_header)
+                  headers: token_header(run.access_token))
 
   end
 
-  def token_header
+  def token_header(access_token)
     {
-        "Authorization" => "token #{get_access_token['token']}"
+        "Authorization" => "token #{access_token}"
     }.merge(headers)
   end
 

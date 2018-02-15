@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180214165608) do
+ActiveRecord::Schema.define(version: 20180215175128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20180214165608) do
     t.integer  "sequential_id"
     t.string   "sha"
     t.integer  "screenshot_count"
+    t.string   "access_token"
   end
 
   add_index "runs", ["suite_id"], name: "index_runs_on_suite_id", using: :btree

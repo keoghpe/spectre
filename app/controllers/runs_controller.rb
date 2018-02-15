@@ -25,11 +25,10 @@ class RunsController < ApplicationController
     # add commit sha, add number of screenshots, post to github
     @run = suite.runs.create(sha: params[:sha], screenshot_count: params[:screenshot_count])
     if params[:sha].present?
-      run = @run
       GithubStatusClient.new.post_status(
-          params[:sha],
+          @run,
           state: 'pending',
-          target_url: project_suite_run_url(run.suite.project, run.suite, run),
+          target_url: project_suite_run_url(@run.suite.project, @run.suite, @run),
           description: 'Processing Screenshots',
           context: 'kubicle_visual_ci'
       )

@@ -32,21 +32,20 @@ class TestsController < ApplicationController
   end
 
   def update_github_status
-    run = @test.run
     if @test.run.sha.present?
       if @test.run.passed?
         GithubStatusClient.new.post_status(
-            @test.run.sha,
+            @test.run,
             state: 'success',
-            target_url: project_suite_run_url(run.suite.project, run.suite, run),
+            target_url: project_suite_run_url(@test.run.suite.project, @test.run.suite, @test.run),
             description: 'Screenshots look good!',
             context: 'kubicle_visual_ci'
         )
       elsif @test.run.failed?
         GithubStatusClient.new.post_status(
-            @test.run.sha,
+            @test.run,
             state: 'failure',
-            target_url: project_suite_run_url(run.suite.project, run.suite, run),
+            target_url: project_suite_run_url(@test.run.suite.project, @test.run.suite, @testrun),
             description: 'Differences detected with baseline.',
             context: 'kubicle_visual_ci'
         )
