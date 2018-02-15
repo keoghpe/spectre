@@ -6,7 +6,7 @@ class GithubStatusClient
     # description	string	A short description of the status.
     # context	string	A string label to differentiate this status from the status of other systems. Default: default
 
-    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{commit_sha}/statuses",
+    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{commit_sha.strip}/statuses",
                   body: {
                       state: state,
                       target_url: target_url,

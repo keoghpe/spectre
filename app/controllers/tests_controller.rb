@@ -12,6 +12,7 @@ class TestsController < ApplicationController
     if params[:test][:baseline] == 'true'
       @test.pass = true
       @test.save
+      update_github_status
       redirect_to project_suite_run_url(@test.run.suite.project, @test.run.suite, @test.run)
     end
   end
@@ -20,6 +21,7 @@ class TestsController < ApplicationController
     ImageProcessor.crop(test_params[:screenshot].path, test_params[:crop_area]) if test_params[:crop_area]
     @test = Test.create!(test_params)
     ScreenshotComparison.new(@test, test_params[:screenshot])
+    update_github_status
     render json: @test.to_json
   end
 
@@ -30,21 +32,22 @@ class TestsController < ApplicationController
   end
 
   def update_github_status
+    run = @test.run
     if @test.run.sha.present?
-      if @run.passed?
+      if @test.run.passed?
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'success',
-            target_url: run_url(@test.run),
+            target_url: project_suite_run_url(run.suite.project, run.suite, run, domain: 'localhost:3000'),
             description: 'Screenshots look good!',
             context: 'kubicle_visual_ci'
         )
-      elsif @run.failed?
+      elsif @test.run.failed?
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'failure',
-            target_url: run_url(@test.run),
-            description: '',
+            target_url: project_suite_run_url(run.suite.project, run.suite, run, domain: 'localhost:3000'),
+            description: 'Differences detected with baseline.',
             context: 'kubicle_visual_ci'
         )
       end
