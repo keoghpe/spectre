@@ -21,3 +21,4 @@ public/system/
 .idea
 .env
 .byebug_history
+*.pem

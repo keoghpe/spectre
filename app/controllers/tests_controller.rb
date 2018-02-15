@@ -31,7 +31,7 @@ class TestsController < ApplicationController
 
   def update_github_status
     if @test.run.sha.present?
-      if passed?
+      if @run.passed?
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'success',
@@ -39,7 +39,7 @@ class TestsController < ApplicationController
             description: 'Screenshots look good!',
             context: 'kubicle_visual_ci'
         )
-      else
+      elsif @run.failed?
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'failure',

@@ -30,6 +30,14 @@ class Run < ActiveRecord::Base
     Rails.application.routes.url_helpers.project_suite_run_path(self.suite.project, self.suite, self)
   end
 
+  def passed?
+    passing_tests == screenshot_count
+  end
+
+  def failed?
+    tests.count == screenshot_count && !passed?
+  end
+
   private
 
   def purge_old_runs
