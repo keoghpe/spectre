@@ -26,6 +26,7 @@ gem 'image_size'
 gem 'unicorn'
 gem "jwt"
 gem 'httparty'
+gem 'dragonfly-s3_data_store'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
