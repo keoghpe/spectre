@@ -27,6 +27,7 @@ gem 'unicorn'
 gem "jwt"
 gem 'httparty'
 gem 'dragonfly-s3_data_store'
+gem 'rollbar'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
