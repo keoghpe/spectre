@@ -38,7 +38,7 @@ class TestsController < ApplicationController
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'success',
-            target_url: project_suite_run_url(run.suite.project, run.suite, run, domain: 'localhost:3000'),
+            target_url: project_suite_run_url(run.suite.project, run.suite, run),
             description: 'Screenshots look good!',
             context: 'kubicle_visual_ci'
         )
@@ -46,7 +46,7 @@ class TestsController < ApplicationController
         GithubStatusClient.new.post_status(
             @test.run.sha,
             state: 'failure',
-            target_url: project_suite_run_url(run.suite.project, run.suite, run, domain: 'localhost:3000'),
+            target_url: project_suite_run_url(run.suite.project, run.suite, run),
             description: 'Differences detected with baseline.',
             context: 'kubicle_visual_ci'
         )

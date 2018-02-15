@@ -29,7 +29,7 @@ class RunsController < ApplicationController
       GithubStatusClient.new.post_status(
           params[:sha],
           state: 'pending',
-          target_url: project_suite_run_url(run.suite.project, run.suite, run, domain: 'localhost:3000'),
+          target_url: project_suite_run_url(run.suite.project, run.suite, run),
           description: 'Processing Screenshots',
           context: 'kubicle_visual_ci'
       )
