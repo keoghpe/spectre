@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <% @projects.includes(:suites).each do |project| %>
-      <% project.suites.each_with_index do |suite, i| %>
+      <% project.suites.order(updated_at: :desc).each_with_index do |suite, i| %>
       <tr id="project_<%= project.id %>" class="project">
         <th><%= project.name %></th>
         <td><%= link_to suite.name, project_suite_path(suite.project, suite) %></td>
