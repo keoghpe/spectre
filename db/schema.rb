@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215175128) do
+ActiveRecord::Schema.define(version: 20180216111451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,12 +52,13 @@ ActiveRecord::Schema.define(version: 20180215175128) do
 
   create_table "runs", force: :cascade do |t|
     t.integer  "suite_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "sequential_id"
     t.string   "sha"
     t.integer  "screenshot_count"
     t.string   "access_token"
+    t.datetime "access_token_expires"
   end
 
   add_index "runs", ["suite_id"], name: "index_runs_on_suite_id", using: :btree
