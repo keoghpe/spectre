@@ -5,7 +5,7 @@ class GithubStatusClient
     #                                                                                                                                                                        http://ci.example.com/user/repo/build/sha
     # description	string	A short description of the status.
     # context	string	A string label to differentiate this status from the status of other systems. Default: default
-    if run.access_token.nil || run.access_token_expires < Time.now
+    if run.access_token.nil? || run.access_token_expires < Time.now
       run.update!(access_token: get_access_token['token'], access_token_expires: DateTime.parse(get_access_token['expires_at']))
     end
 
