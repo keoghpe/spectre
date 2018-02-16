@@ -5,19 +5,23 @@ class GithubStatusClient
     #                                                                                                                                                                        http://ci.example.com/user/repo/build/sha
     # description	string	A short description of the status.
     # context	string	A string label to differentiate this status from the status of other systems. Default: default
-    if run.access_token.nil? || run.access_token_expires < Time.now
-      run.update!(access_token: get_access_token['token'], access_token_expires: DateTime.parse(get_access_token['expires_at']))
+    if run.state != state
+      run.update!(state: state)
+
+      if run.access_token.nil? || run.access_token_expires < Time.now
+        run.update!(access_token: get_access_token['token'], access_token_expires: DateTime.parse(get_access_token['expires_at']))
+      end
+
+      HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{run.sha.strip}/statuses",
+                    body: {
+                        state: state,
+                        target_url: target_url,
+                        description: description,
+                        context: context
+                    }.to_json,
+                    headers: token_header(run.access_token))
+
     end
-
-    HTTParty.post("https://api.github.com/repos/virtuosolearning/virtuoso/commits/#{run.sha.strip}/statuses",
-                  body: {
-                      state: state,
-                      target_url: target_url,
-                      description: description,
-                      context: context
-                  }.to_json,
-                  headers: token_header(run.access_token))
-
   end
 
   def token_header(access_token)
