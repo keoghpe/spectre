@@ -28,6 +28,7 @@ gem "jwt"
 gem 'httparty'
 gem 'dragonfly-s3_data_store'
 gem 'rollbar'
+gem 'devise'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
