@@ -1,4 +1,6 @@
 class BaselinesController < ApplicationController
+  skip_before_filter :authenticate_user!
+
   def show
     @baseline = Baseline.where(key: params[:key]).first
     raise ActiveRecord::RecordNotFound if @baseline.nil?

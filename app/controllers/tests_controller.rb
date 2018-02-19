@@ -2,6 +2,7 @@ require 'image_processor'
 
 class TestsController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_filter :authenticate_user!, only: [:create]
 
   def new
     @test = Test.new
