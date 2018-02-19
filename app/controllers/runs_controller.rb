@@ -1,6 +1,6 @@
 class RunsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  skip_before_filter :authenticate_user!, only: [:create]
+  skip_before_filter :authenticate_user!, only: [:show, :create]
 
   def show
     project = Project.find_by_slug!(params[:project_slug])
