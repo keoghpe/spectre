@@ -46,7 +46,7 @@ class TestsController < ApplicationController
         GithubStatusClient.new.post_status(
             @test.run,
             state: 'failure',
-            target_url: project_suite_run_url(@test.run.suite.project, @test.run.suite, @testrun),
+            target_url: project_suite_run_url(@test.run.suite.project, @test.run.suite, @test.run),
             description: 'Differences detected with baseline.',
             context: 'kubicle_visual_ci'
         )
