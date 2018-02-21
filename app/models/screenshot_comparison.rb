@@ -48,6 +48,8 @@ class ScreenshotComparison
   def determine_baseline_image(test, screenshot)
     # find an existing baseline screenshot for this test
     baseline_test = Baseline.find_by_key(test.key)
+    # find a baseline image for the project if none found above
+    baseline_test ||= Baseline.find_by_key(test.project_baseline_key)
 
     # grab the existing baseline image and cache it against this test
     # otherwise compare against itself

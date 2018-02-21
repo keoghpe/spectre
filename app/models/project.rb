@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   has_many :suites, :dependent => :destroy
+  has_one :baseline_suite, class_name: 'Suite'
   after_initialize :create_slug
 
   def create_slug

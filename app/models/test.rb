@@ -4,7 +4,7 @@ class Test < ActiveRecord::Base
   after_save :update_baseline
   after_destroy :delete_thumbnails
   belongs_to :run
-  default_scope { order(:created_at) }
+  default_scope {order(:created_at)}
   dragonfly_accessor :screenshot
   dragonfly_accessor :screenshot_baseline
   dragonfly_accessor :screenshot_diff
@@ -34,6 +34,12 @@ class Test < ActiveRecord::Base
 
   def url
     "#{run.url}#test_#{id}"
+  end
+
+  def project_baseline_key
+    if run.suite.project.baseline_suite.present?
+      "#{run.suite.project.name} #{run.suite.project.baseline_suite.name} #{name} #{browser} #{size}".parameterize
+    end
   end
 
   def create_key
@@ -68,7 +74,7 @@ class Test < ActiveRecord::Base
   def five_consecutive_failures
     previous_tests = Test.find_last_five_by_key(key)
     return false if previous_tests.length < 5
-    previous_tests.all? { |t| t.pass == false }
+    previous_tests.all? {|t| t.pass == false}
   end
 
   private
@@ -81,15 +87,26 @@ class Test < ActiveRecord::Base
   end
 
   def update_baseline
-    return unless self.pass
-    Baseline.find_or_initialize_by(key: self.key).update_attributes!(
-      key: self.key,
-      name: self.name,
-      browser: self.browser,
-      size: self.size,
-      suite: self.run.suite,
-      screenshot: self.screenshot,
-      test_id: self.id
-    )
+    if baseline.nil? && screenshot_baseline.present?
+      Baseline.create!(
+          key: self.key,
+          name: self.name,
+          browser: self.browser,
+          size: self.size,
+          suite: self.run.suite,
+          screenshot: self.screenshot_baseline,
+          test_id: self.id
+      )
+    elsif self.pass
+      Baseline.find_or_initialize_by(key: self.key).update_attributes!(
+          key: self.key,
+          name: self.name,
+          browser: self.browser,
+          size: self.size,
+          suite: self.run.suite,
+          screenshot: self.screenshot,
+          test_id: self.id
+      )
+    end
   end
 end
