@@ -1,0 +1,16 @@
+.users {
+  .sign-in {
+    h2 {
+      text-align: center;
+    }
+    .new_user {
+      margin: 0 auto;
+      width: 40%;
+      display: block;
+      position: relative;
+      background-color: colour('yellow');
+      padding: 16px;
+      border-radius: 4px;
+    }
+  }
+}
