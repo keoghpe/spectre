@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180221144612) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "slug"
+    t.string   "github_repo"
     t.integer  "baseline_suite_id"
   end
 
