@@ -13,6 +13,7 @@ class TestsController < ApplicationController
     if params[:test][:baseline] == 'true'
       @test.pass = true
       @test.save
+      @test.set_as_baseline
       update_github_status
       redirect_to project_suite_run_url(@test.run.suite.project, @test.run.suite, @test.run)
     end
@@ -53,4 +54,5 @@ class TestsController < ApplicationController
       end
     end
   end
+
 end

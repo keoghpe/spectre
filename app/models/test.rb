@@ -1,7 +1,6 @@
 class Test < ActiveRecord::Base
   after_initialize :default_values
   after_create :create_key
-  after_save :update_baseline
   after_destroy :delete_thumbnails
   belongs_to :run
   default_scope {order(:created_at)}
@@ -77,6 +76,18 @@ class Test < ActiveRecord::Base
     previous_tests.all? {|t| t.pass == false}
   end
 
+  def set_as_baseline
+    Baseline.create!(
+        key: self.key,
+        name: self.name,
+        browser: self.browser,
+        size: self.size,
+        suite: self.run.suite,
+        screenshot: self.screenshot,
+        test_id: self.id
+    )
+  end
+
   private
 
   def default_values
@@ -86,27 +97,4 @@ class Test < ActiveRecord::Base
     self.highlight_colour = 'ff0000' if self.highlight_colour.blank?
   end
 
-  def update_baseline
-    if baseline.nil? && screenshot_baseline.present?
-      Baseline.create!(
-          key: self.key,
-          name: self.name,
-          browser: self.browser,
-          size: self.size,
-          suite: self.run.suite,
-          screenshot: self.screenshot_baseline,
-          test_id: self.id
-      )
-    elsif self.pass
-      Baseline.find_or_initialize_by(key: self.key).update_attributes!(
-          key: self.key,
-          name: self.name,
-          browser: self.browser,
-          size: self.size,
-          suite: self.run.suite,
-          screenshot: self.screenshot,
-          test_id: self.id
-      )
-    end
-  end
 end
