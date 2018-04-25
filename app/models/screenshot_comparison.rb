@@ -61,6 +61,7 @@ class ScreenshotComparison
       end
     else
       test.screenshot_baseline = screenshot
+      test.set_as_baseline
     end
 
     test.save!
