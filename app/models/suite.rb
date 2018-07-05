@@ -20,4 +20,8 @@ class Suite < ActiveRecord::Base
   def purge_old_runs
     self.runs.order(id: :desc).offset(5).destroy_all
   end
+
+  def is_baseline_suite?
+    self == project.baseline_suite
+  end
 end

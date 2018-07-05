@@ -13,6 +13,13 @@ FactoryGirl.define do
     name 'spec_suite'
     slug 'spec_suite_slug'
     project
+    factory :baseline_suite do
+      after(:create) do |suite|
+        project = suite.project
+        project.baseline_suite = suite
+        project.save!
+      end
+    end
   end
 
   factory :run do
