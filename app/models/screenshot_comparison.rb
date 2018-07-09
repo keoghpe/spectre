@@ -78,6 +78,7 @@ class ScreenshotComparison
       test.diff = pixel_count.round(2)
       # TODO: pull out 0.1 (diff threshhold to config variable)
       if test.run.suite.is_baseline_suite?
+        test.set_as_baseline
         true
       else
         (test.diff < 0.1)
