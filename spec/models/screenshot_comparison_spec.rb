@@ -19,19 +19,36 @@ RSpec.describe ScreenshotComparison do
   end
 
   it 'should automatically pass if it is the project baseline' do
+    test = FactoryGirl.create(:test, run: baseline_run, screenshot: same_image)
+    expect(test).to receive(:set_as_baseline).at_least(:once)
     different_screenshot_comparison = ScreenshotComparison.new(
-        FactoryGirl.create(:test, run: baseline_run, screenshot: same_image),
+        test,
         different_image
     )
     expect(different_screenshot_comparison.pass).to eq true
   end
 
   it 'should fail a test that is different to it\'s project\'s baseline' do
-    different_suite_comparison = ScreenshotComparison.new(
-        FactoryGirl.create(:test, run: new_run, screenshot: same_image),
-        different_image
+    test_baseline = FactoryGirl.create(:test, run: baseline_run, screenshot: different_image)
+    test_baseline.set_as_baseline
+    test_baseline.save!
+
+    different_suite_same_image_comparison = ScreenshotComparison.new(
+        FactoryGirl.create(:test, run: new_run, screenshot: different_image),
+        same_image
     )
-    expect(different_suite_comparison.pass).to eq false
+    expect(different_suite_same_image_comparison.pass).to eq true
+
+    ScreenshotComparison.new(
+        FactoryGirl.create(:test, run: baseline_run, screenshot: same_image),
+        same_image
+    )
+
+    different_suite_comparison_2 = ScreenshotComparison.new(
+        FactoryGirl.create(:test, run: new_run, screenshot: different_image),
+        same_image
+    )
+    expect(different_suite_comparison_2.pass).to eq false
   end
 
 end

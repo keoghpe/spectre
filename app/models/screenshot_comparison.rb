@@ -79,6 +79,7 @@ class ScreenshotComparison
       # TODO: pull out 0.1 (diff threshhold to config variable)
       if test.run.suite.is_baseline_suite?
         test.set_as_baseline
+        test.save!
         true
       else
         (test.diff < 0.1)

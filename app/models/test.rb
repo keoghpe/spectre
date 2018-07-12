@@ -77,15 +77,27 @@ class Test < ActiveRecord::Base
   end
 
   def set_as_baseline
-    Baseline.create!(
-        key: self.key,
-        name: self.name,
-        browser: self.browser,
-        size: self.size,
-        suite: self.run.suite,
-        screenshot: self.screenshot,
-        test_id: self.id
-    )
+    if baseline.nil?
+      Baseline.create!(
+          key: self.key,
+          name: self.name,
+          browser: self.browser,
+          size: self.size,
+          suite: self.run.suite,
+          screenshot: self.screenshot,
+          test_id: self.id
+      )
+    else
+      Baseline.find_or_initialize_by(key: self.key).update_attributes!(
+          key: self.key,
+          name: self.name,
+          browser: self.browser,
+          size: self.size,
+          suite: self.run.suite,
+          screenshot: self.screenshot,
+          test_id: self.id
+      )
+    end
   end
 
   private
