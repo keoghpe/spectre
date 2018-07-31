@@ -25,7 +25,7 @@ class RunsController < ApplicationController
     suite = project.suites.find_or_create_by(name: params[:suite])
     # add commit sha, add number of screenshots, post to github
     @run = suite.runs.find_or_initialize_by(sha: params[:sha])
-    @run.screenshot_count += params[:screenshot_count]
+    @run.screenshot_count += params[:screenshot_count].to_i
     @run.save!
 
     if params[:sha].present?
