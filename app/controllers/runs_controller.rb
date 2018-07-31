@@ -24,7 +24,10 @@ class RunsController < ApplicationController
     project = Project.find_or_create_by(name: params[:project])
     suite = project.suites.find_or_create_by(name: params[:suite])
     # add commit sha, add number of screenshots, post to github
-    @run = suite.runs.create(sha: params[:sha], screenshot_count: params[:screenshot_count])
+    @run = suite.runs.find_or_initialize_by(sha: params[:sha])
+    @run.screenshot_count += params[:screenshot_count]
+    @run.save!
+
     if params[:sha].present?
       GithubStatusClient.new.post_status(
           @run,
